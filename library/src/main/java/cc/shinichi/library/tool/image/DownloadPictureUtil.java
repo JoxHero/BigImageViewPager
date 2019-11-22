@@ -1,7 +1,9 @@
 package cc.shinichi.library.tool.image;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -64,6 +66,8 @@ public class DownloadPictureUtil {
                 boolean result = FileUtil.copyFile(resource, path, name);
                 if (result) {
                     ToastUtil.getInstance()._short(context, "成功保存到 ".concat(path).concat(name));
+                    Uri uri = Uri.fromFile(new File(path));
+                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,uri));
                     new SingleMediaScanner(context, path.concat(name), new SingleMediaScanner.ScanListener() {
                         @Override
                         public void onScanFinish() {
